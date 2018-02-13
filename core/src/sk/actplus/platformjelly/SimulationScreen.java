@@ -15,6 +15,8 @@ import com.badlogic.gdx.physics.box2d.World;
 
 import sun.java2d.ScreenUpdateManager;
 
+import static sk.actplus.platformjelly.Game.CLIENT_HEIGHT;
+import static sk.actplus.platformjelly.Game.CLIENT_WIDTH;
 import static sk.actplus.platformjelly.Game.PPM;
 
 /**
@@ -105,36 +107,39 @@ public class SimulationScreen implements Screen, InputProcessor
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if(button == Button.LEFT){
+            game.camera.checkTouchDown(new Vector2((screenX - (CLIENT_WIDTH / 2))/20,((CLIENT_HEIGHT/2) - screenY)/20));
             System.out.println("Screen Position: x: " + screenX + " , y: " + screenY);
             System.out.println("World Position: x: " + screenX + " , y: " + screenY);
-    }
+        }
 
         return false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-
-        return false;
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        if(Gdx.input.isButtonPressed(Button.RIGHT)){
-            game.camera.move((screenX-centerPoint.x)/20,(centerPoint.y-screenY)/20);
+        if(button == Button.LEFT) {
+            game.camera.checkTouchUp();
         }
         return false;
     }
 
     @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+
+        return false;
+    }
+
+    @Override
     public boolean mouseMoved(int screenX, int screenY) {
+        game.camera.checkMouseMoved(new Vector2(screenX,screenY));
+
         return false;
     }
 
     @Override
     public boolean scrolled(int amount) {
-        PPM-=amount;
-        game.camera.updatePPM();
+        game.camera.checkScrolled(amount);
+        System.out.println("scrolling");
         return false;
     }
 }
