@@ -27,7 +27,7 @@ public class Game {
 
     World world;
     Box2DDebugRenderer bddr;
-    MovableCamera camera;
+    public MovableCamera camera;
     RayHandler rayHandler;
 
     public Game() {
@@ -67,8 +67,7 @@ public class Game {
     }
 
 
-
     public void update(float delta){
-
+        camera.update();
     }
 }
