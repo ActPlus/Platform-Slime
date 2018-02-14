@@ -35,6 +35,8 @@ public class SimulationScreen implements Screen, InputProcessor
     String fragmentShader;
     ShaderProgram shaderProgram;
 
+    //TODO remove from code and load it from file
+    //shader code gray scale
     public static final String VERT_SHADER =
             "attribute vec4 a_position;\n" +
                     "attribute vec4 a_color;\n" +
@@ -66,6 +68,14 @@ public class SimulationScreen implements Screen, InputProcessor
                     "        gl_FragColor = vec4(grayscale, 1.0);\n" +
                     "}";
 
+    //TODO learn how to map shaders
+    //TODO decide if shaders are good for this application
+
+    /**
+     * otazka ??
+     * pokusit sa namapovat texturu jednej zakladnej farby
+     * potom pomocou shaderu menit jej realnu farbu
+     */
 
     public SimulationScreen(SpriteBatch batch) {
         this.batch = batch;
@@ -74,6 +84,8 @@ public class SimulationScreen implements Screen, InputProcessor
         vertexShader = VERT_SHADER;
         fragmentShader = FRAG_SHADER;
         shaderProgram = new ShaderProgram(vertexShader,fragmentShader);
+
+        //error handling very usefull
         if (!shaderProgram.isCompiled()) throw new GdxRuntimeException("Couldn't compile shader: " + shaderProgram.getLog());
 
         game = new Game();

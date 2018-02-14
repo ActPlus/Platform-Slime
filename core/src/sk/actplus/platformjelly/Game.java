@@ -104,15 +104,15 @@ public class Game {
         Body body = world.createBody(bodyDef);
         body.createFixture(fixtureDef);
 
-        //rayHandler = new RayHandler(world);
-        //rayHandler.setShadows(false);
-        //new PointLight(rayHandler, 5, new Color(0.1f,1,1,0.8f), 100, 0, 0);
+        rayHandler = new RayHandler(world);
+        rayHandler.setShadows(false);
+        new PointLight(rayHandler, 5, new Color(0.1f,1,1,0.8f), 100, 0, 0);
     }
 
     public void render(float delta) {
         update(delta);
-        //.setCombinedMatrix(camera);
-        //rayHandler.updateAndRender();
+        rayHandler.setCombinedMatrix(camera);
+        rayHandler.updateAndRender();
         bddr.render(world,camera.combined);
     }
 
