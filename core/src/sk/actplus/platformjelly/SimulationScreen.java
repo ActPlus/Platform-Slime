@@ -8,10 +8,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 
 import sun.java2d.ScreenUpdateManager;
 
@@ -27,11 +29,52 @@ public class SimulationScreen implements Screen, InputProcessor
 {
     SpriteBatch batch;
     Texture img = new Texture("badlogic.jpg");
+    Sprite sprite = new Sprite(img);
     Game game;
+    String vertexShader;
+    String fragmentShader;
+    ShaderProgram shaderProgram;
+
+    public static final String VERT_SHADER =
+            "attribute vec4 a_position;\n" +
+                    "attribute vec4 a_color;\n" +
+                    "attribute vec2 a_texCoord0;\n" +
+                    "uniform mat4 u_projTrans;\n" +
+                    "varying vec4 vColor;\n" +
+                    "varying vec2 v_texCoords;\n"+
+                    "void main() {\n" +
+                    "	vColor = a_color;\n" +
+                    "	 v_texCoords = a_texCoord0;\n" +
+                    "    gl_Position = u_projTrans * a_position;\n" +
+                    "}";
+
+    public static final String FRAG_SHADER =
+            "#ifdef GL_ES\n" +
+                    "    precision mediump float;\n" +
+                    "#endif\n" +
+                    "\n" +
+                    "varying vec4 v_color;\n" +
+                    "varying vec2 v_texCoords;\n" +
+                    "uniform sampler2D u_texture;\n" +
+                    "uniform mat4 u_projTrans;\n" +
+                    "\n" +
+                    "void main() {\n" +
+                    "        vec3 color = texture2D(u_texture, v_texCoords).rgb;\n" +
+                    "        float gray = (color.r + color.g + color.b) / 3.0;\n" +
+                    "        vec3 grayscale = vec3(gray);\n" +
+                    "\n" +
+                    "        gl_FragColor = vec4(grayscale, 1.0);\n" +
+                    "}";
+
 
     public SimulationScreen(SpriteBatch batch) {
         this.batch = batch;
         Gdx.input.setInputProcessor(this);
+
+        vertexShader = VERT_SHADER;
+        fragmentShader = FRAG_SHADER;
+        shaderProgram = new ShaderProgram(vertexShader,fragmentShader);
+        if (!shaderProgram.isCompiled()) throw new GdxRuntimeException("Couldn't compile shader: " + shaderProgram.getLog());
 
         game = new Game();
     }
@@ -45,7 +88,9 @@ public class SimulationScreen implements Screen, InputProcessor
     public void render(float delta) {
 
         batch.begin();
-        //batch.draw(img, 0, 0);
+        batch.draw(img, 0, 0);
+        batch.setShader(shaderProgram);
+        batch.draw(sprite,sprite.getX(),sprite.getY(),sprite.getWidth(),sprite.getHeight());
         batch.end();
         game.render(delta);
     }

@@ -4,8 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.VertexAttribute;
-import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -41,9 +39,9 @@ public class Game {
     //The maximum number of vertices our mesh will hold
     public static final int MAX_VERTS = MAX_TRIS * 3;
     private float[] verts = new float[MAX_VERTS * NUM_COMPONENTS];
+
     //The index position
     private int idx = 0;
-
     /**
      * shader
      */
@@ -90,22 +88,11 @@ public class Game {
 
 
         PolygonShape shape = new PolygonShape();
-
-        /**
-         * tiangle
-         */
-        /*Vector2[] vertices = new Vector2[3];
+        Vector2[] vertices = new Vector2[3];
         vertices[0] = new Vector2(0,0);
         vertices[1] = new Vector2(2,3);
         vertices[2] = new Vector2(4,1);
-        shape.set(vertices);*/
-
-
-        mesh = new Mesh(true,MAX_VERTS,0,
-                new VertexAttribute(VertexAttributes.Usage.Position,POSITION_COMPONENTS,"a_position"),
-                new VertexAttribute(VertexAttributes.Usage.ColorPacked,COLOR_COMPONENTS,"a_color"));
-
-
+        shape.set(vertices);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.density = 1;
@@ -117,15 +104,15 @@ public class Game {
         Body body = world.createBody(bodyDef);
         body.createFixture(fixtureDef);
 
-        rayHandler = new RayHandler(world);
-        rayHandler.setShadows(false);
-        new PointLight(rayHandler, 5, new Color(0.1f,1,1,0.8f), 100, 0, 0);
+        //rayHandler = new RayHandler(world);
+        //rayHandler.setShadows(false);
+        //new PointLight(rayHandler, 5, new Color(0.1f,1,1,0.8f), 100, 0, 0);
     }
 
     public void render(float delta) {
         update(delta);
-        rayHandler.setCombinedMatrix(camera);
-        rayHandler.updateAndRender();
+        //.setCombinedMatrix(camera);
+        //rayHandler.updateAndRender();
         bddr.render(world,camera.combined);
     }
 
