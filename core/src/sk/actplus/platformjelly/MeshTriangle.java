@@ -1,4 +1,4 @@
-package sk.actplus.platformjelly;
+/*package sk.actplus.platformjelly;
  import com.badlogic.gdx.ApplicationListener;
  import com.badlogic.gdx.Gdx;
  import com.badlogic.gdx.graphics.GL20;
@@ -11,7 +11,7 @@ package sk.actplus.platformjelly;
  */
 
 
-
+/*
     public class MeshTriangle implements ApplicationListener {
         private Mesh mesh;
 
@@ -46,4 +46,4 @@ package sk.actplus.platformjelly;
         @Override
         public void resume() { }
     }
-}
+}*/
